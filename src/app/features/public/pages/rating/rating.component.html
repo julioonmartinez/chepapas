@@ -1,0 +1,79 @@
+<div class="papa-rating-container">
+  <!-- Header minimalista -->
+  <header class="header">
+    <h1>Papas Zamora</h1>
+    <p>Descubre y califica los mejores puestos</p>
+  </header>
+
+  <!-- Card Principal -->
+  <mat-card class="rating-card"  [@coffeeState]="animationState"  >
+    
+            <!-- Rating Stamps -->
+            <div class="rating-stamp" *ngIf="currentRating" [@stampAnimation]>
+              <span [ngClass]="getRatingStampClass()">
+                {{ getRatingStampText() }}
+              </span>
+            </div>
+    <!-- Imagen y detalles -->
+    <div class="puesto-image-container">
+      <img [src]="currentPuesto.imagen" [alt]="currentPuesto.nombre">
+      
+      <div class="puesto-info-overlay">
+        <h2>{{currentPuesto.nombre}}</h2>
+        
+        <div class="info-row">
+          <mat-icon>location_on</mat-icon>
+          <span>{{currentPuesto.ubicacion}}</span>
+        </div>
+        
+        <div class="info-row">
+          <mat-icon>schedule</mat-icon>
+          <span>{{currentPuesto.horario}}</span>
+        </div>
+        
+        <div class="info-row">
+          <mat-icon>local_fire_department</mat-icon>
+          <span>{{currentPuesto.especialidad}}</span>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="popularity-badge">
+        
+          <mat-icon class="super-shot-icon" 
+                    [matBadge]="superShotsLeft" 
+                    matBadgeColor="accent">bolt</mat-icon>
+          <span>Super Shots</span>
+        
+      </div>
+
+      <div class="wait-time-badge">
+        ⏱️ {{currentPuesto.espera}}
+      </div>
+    </div>
+
+    <!-- Botones de valoración -->
+    <div class="rating-buttons">
+      <button mat-fab color="warn" (click)="rateCoffee('dislike')"
+              [@buttonPress]="getButtonState('dislike')">
+        ✖️
+      </button>
+
+      <button mat-fab [matBadge]="superShotsLeft"  (click)="rateCoffee('supershot')"
+              [disabled]="superShotsLeft === 0"
+              [@buttonPress]="getButtonState('supershot')">
+        ✨
+      </button>
+
+      <button mat-fab  (click)="rateCoffee('like')"
+              [@buttonPress]="getButtonState('like')">
+        😍
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- Footer minimalista -->
+  <footer class="footer">
+    <p>¿Tienes un puesto? <button mat-button color="accent">Regístralo aquí</button></p>
+  </footer>
+</div>
