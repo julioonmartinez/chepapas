@@ -1,2 +1,16 @@
-<router-outlet />
+<mat-sidenav-container>
+    <mat-sidenav #side >
+        <mat-toolbar>
+            <button (click)="side.toggle()" mat-icon-button >
+                <mat-icon>menu</mat-icon>
+            </button>
+        </mat-toolbar>
+    </mat-sidenav>
+    <mat-sidenav-content class="content-router" >
+        
+        
+        <router-outlet />
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
 

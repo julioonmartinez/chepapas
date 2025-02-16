@@ -1,22 +1,44 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 
-html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
-}/* You can add global styles to this file, and also import other style files */
+// Puedes usar una paleta existente de Angular Material, por ejemplo, deep orange
+$primary-palette: mat.$magenta-palette;
 
+// Opcional: define paletas para acento y advertencia (warn)
+$accent-palette: mat.$magenta-palette;
+$warn-palette: mat.$red-palette;
+
+// Define el tema personalizado con el tono deseado
+$custom-theme: mat.define-theme((
+  color: (
+    theme-type: dark,  // Puedes usar 'dark' si prefieres un tema oscuro
+    primary: $primary-palette,
+    tertiary: $accent-palette,
+    
+  ),
+  
+));
+
+:root {
+  // Este mixin genera los estilos y las variables CSS (system variables) basados en $custom-theme
+  @include mat.all-component-themes($custom-theme);
+
+  // Opcional: si deseas sobrescribir alguna system variable, por ejemplo, para un tono "orange red":
+  @include mat.theme-overrides((
+    primary: #fe5f26,     // Este es el valor hexadecimal para "orange red"
+    // on-primary: #ffffff,   // Contraste para textos o íconos sobre el primary
+  ));
+}
+
+
+h1{
+  color: var(--mat-sys-primary);
+ }
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+ 
+}
 
 h1,
 h2,
@@ -29,7 +51,10 @@ p
   font-size: 100%;
   font-weight: normal;
   margin: 0;
+  
 }
+
+
 .snackbar-like {
   background: #4CAF50;
   color: white;
@@ -44,3 +69,4 @@ p
   background: #FF9800;
   color: white;
 }
+

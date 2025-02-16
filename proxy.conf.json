@@ -1,0 +1,10 @@
+{
+    "/api-chepapas": {
+      "target": "https://chepapas-backend.vercel.app/",
+      "secure": false,
+      "changeOrigin": true,
+      "pathRewrite": { 
+        "^/api-chepapas": "" }
+    }
+  }
+  

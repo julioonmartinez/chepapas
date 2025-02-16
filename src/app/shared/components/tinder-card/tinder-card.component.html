@@ -1,0 +1,85 @@
+@if (chePapasList() && currenPapas()) {
+  <mat-card class="rating-card"  [@coffeeState]="animationState"  >
+    
+    <!-- Rating Stamps -->
+    @if (currentRating) {
+      <div class="rating-stamp"  [@stampAnimation]>
+        <span [ngClass]="getRatingStampClass()">
+          {{ getRatingStampText() }}
+        </span>
+      </div>
+    }
+<!-- Imagen y detalles -->
+<div class="puesto-image-container">
+<img [src]="defaultImage" [alt]="currenPapas()!.displayName || ''">
+
+<div class="puesto-info-overlay">
+<h2>{{currenPapas()!.displayName || 'noname' }}</h2>
+
+<div class="info-row">
+  <mat-icon>location_on</mat-icon>
+  <span>{{currenPapas()!.formattedAddress || 'noname'}}</span>
+</div>
+
+<div class="info-row">
+  <mat-icon>schedule</mat-icon>
+  <span>{{currenPapas()!.hours || 'Sin horario'}}</span>
+</div>
+
+<div class="info-row">
+  <mat-icon>local_fire_department</mat-icon>
+  <span>{{currenPapas()!.rating || 'noname'}}</span>
+</div>
+</div>
+
+<!-- Badges -->
+<div class="popularity-badge">
+
+  <mat-icon class="super-shot-icon" 
+            [matBadge]="superShotsLeft" 
+            matBadgeColor="accent">bolt</mat-icon>
+  <span>Super Shots</span>
+
+</div>
+
+<div class="wait-time-badge">
+⏱️ ✊🚀✖️😍
+</div>
+</div>
+
+<!-- Botones de valoración -->
+@if (ratindMode() === 'tinder') {
+  <div class="rating-buttons">
+    <button mat-fab color="warn" (click)="rateCoffee('dislike')"
+          [@buttonPress]="getButtonState('dislike')">
+    ✖️
+    </button>
+    
+    <button mat-fab [matBadge]="superShotsLeft"  (click)="rateCoffee('supershot')"
+          [disabled]="superShotsLeft === 0"
+          [@buttonPress]="getButtonState('supershot')">
+    ✨
+    </button>
+    
+    <button mat-fab  (click)="rateCoffee('like')"
+          [@buttonPress]="getButtonState('like')">
+    😍
+    </button>
+    </div>
+}@else if (ratindMode() === 'star') {
+  <div class="rating-stars">
+    @for (star of [1, 2 , 3 , 4 , 5]; track $index) {
+      <button [disabled]="isAnimating" (click)="ratingStar(star)" mat-icon-button >
+        @if (startSelected >= star) {
+          <img  src="https://img.icons8.com/emoji/48/star-emoji.png" alt="star-emoji"/>
+        }@else {
+          <img  src="https://img.icons8.com/color/48/star--v1.png" alt="star--v1"/>
+        }
+      </button>
+    }
+  </div>
+}
+</mat-card>
+}@else {
+  <p>Cargando</p>
+}

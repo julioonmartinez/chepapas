@@ -1,0 +1,10 @@
+.toolbar{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    h1{
+        text-align: center;
+    }
+}
+.content-router{
+    min-height: 100vh;
+}

@@ -162,22 +162,7 @@ export class RatingComponent {
     });
   }
 
-  ratePuesto(rating: 'like' | 'dislike' | 'supershot') {
-    if (rating === 'supershot' && this.superShotsLeft === 0) return;
 
-    this.buttonStates[rating] = 'pressed';
-    this.animationState = 'swiped';
-
-    if (rating === 'supershot') {
-      this.superShotsLeft--;
-    }
-
-    setTimeout(() => {
-      this.currentIndex = (this.currentIndex + 1) % this.puestos.length;
-      this.animationState = 'normal';
-      this.buttonStates[rating] = 'normal';
-    }, 300);
-  }
 
   getButtonState(button: string): 'normal' | 'pressed' {
     return this.buttonStates[button];

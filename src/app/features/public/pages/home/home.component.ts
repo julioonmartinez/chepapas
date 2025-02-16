@@ -5,88 +5,95 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
-
+import {MatGridListModule} from '@angular/material/grid-list';
+import { RatingComponent } from "../rating/rating.component";
+import { TinderCardComponent } from '../../../../shared/components/tinder-card/tinder-card.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
+import { MatToolbarModule } from '@angular/material/toolbar';
 @Component({
   selector: 'app-home',
   imports: [
-    CommonModule,
     MatCardModule,
-    MatIconModule,
+    CommonModule,
+    MatGridListModule,
     MatButtonModule,
-    MatBadgeModule
-  ],
+    MatIconModule,
+    TinderCardComponent,
+    MatButtonToggleModule,
+    FormsModule,
+    MatToolbarModule,
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-  animations: [
-    trigger('cardAnimation', [
-      state('normal', style({ transform: 'scale(1)' })),
-      state('swiped', style({ transform: 'translateX(150%) rotate(30deg)' })),
-      transition('normal => swiped', animate('300ms ease-out')),
-      transition('swiped => normal', animate('0ms'))
-    ]),
-    trigger('buttonPress', [
-      state('normal', style({ transform: 'scale(1)' })),
-      state('pressed', style({ transform: 'scale(0.9)' })),
-      transition('* <=> *', animate('100ms ease-out'))
-    ])
-  ]
+  
 })
 export class HomeComponent {
-  puestos = [
+  // Modo de valoración: 'estrillitas' o 'tinder'
+  ratingMode: 'star' | 'tinder' = 'star';
+  estrillitas = new Array(5);
+  currentEstrillitas = 0;
+  currentTinder: 'like' | 'dislike' | null = null;
+
+  // Datos de ejemplo para los puestos
+  stands = [
     {
-      id: 1,
-      nombre: "Doña Mary",
-      ubicacion: "Portal Hidalgo",
-      horario: "3pm - 10pm",
-      especialidad: "Papas con chorizo",
-      imagen: "https://pinaenlacocina.com/wp-content/uploads/2019/11/IMG_0742-680x907.jpg",
-      popularidad: 98,
-      espera: "5-10 min"
+      name: 'Papas El Buen Sabor',
+      location: 'Centro',
+      image: 'https://www.cardamomo.news/__export/1683742761077/sites/debate/img/2023/05/10/papas_zamoranas.png_172596871.png',
+      description: 'Las mejores papas cocidas de la ciudad.',
+      comments: ['Delicioso', 'Muy recomendables']
     },
     {
-      id: 2,
-      nombre: "Las Tradicionales",
-      ubicacion: "Plaza Principal",
-      horario: "4pm - 11pm",
-      especialidad: "Papas con chamoy",
-      imagen: "https://www.cardamomo.news/__export/1683742761077/sites/debate/img/2023/05/10/papas_zamoranas.png_172596871.png",
-      popularidad: 95,
-      espera: "15-20 min"
+      name: 'Papas La Tradición',
+      location: 'Barrio Histórico',
+      image: 'https://pinaenlacocina.com/wp-content/uploads/2019/11/IMG_0742-680x907.jpg',
+      description: 'Receta tradicional con el sazón de siempre.',
+      comments: ['Auténtico', 'Sabe a tradición']
     }
+    // Agrega más puestos según necesites...
   ];
 
-  currentIndex = 0;
-  superShotsLeft = 3;
-  animationState = 'normal';
-  buttonStates: { [key: string]: 'normal' | 'pressed' } = {
-    like: 'normal',
-    dislike: 'normal',
-    supershot: 'normal'
-  };
-
-  get currentPuesto() {
-    return this.puestos[this.currentIndex];
-  }
-
-  ratePuesto(rating: 'like' | 'dislike' | 'supershot') {
-    if (rating === 'supershot' && this.superShotsLeft === 0) return;
-
-    this.buttonStates[rating] = 'pressed';
-    this.animationState = 'swiped';
-
-    if (rating === 'supershot') {
-      this.superShotsLeft--;
+  // Datos de ejemplo para el Top 10
+  top10 = [
+    {
+      name: 'Papas El Buen Sabor',
+      image: 'https://www.cardamomo.news/__export/1683742761077/sites/debate/img/2023/05/10/papas_zamoranas.png_172596871.png',
+      rating: 4.8
+    },
+    {
+      name: 'Papas La Tradición',
+      image: 'https://www.cardamomo.news/__export/1683742761077/sites/debate/img/2023/05/10/papas_zamoranas.png_172596871.png',
+      rating: 4.6
     }
+    // Completa con 10 puestos...
+  ];
 
-    setTimeout(() => {
-      this.currentIndex = (this.currentIndex + 1) % this.puestos.length;
-      this.animationState = 'normal';
-      this.buttonStates[rating] = 'normal';
-    }, 300);
+  // Datos de ejemplo para salsas picosas
+  salsasPicosas = [
+    { name: 'Salsa Infernal', nivelPicante: 'Muy Alto' },
+    { name: 'Salsa Fuego', nivelPicante: 'Alto' }
+    // Más salsas...
+  ];
+
+  // Datos de ejemplo para puestos con variedad de salsas
+  standsConVariedad = [
+    { name: 'Papas La Diversa', variedad: '5 tipos de salsas' },
+    { name: 'Puestos Sabor y Variedad', variedad: '7 tipos de salsas' }
+    // Más puestos...
+  ];
+
+  constructor() { }
+
+  ngOnInit(): void { }
+
+  setRatingMode(mode: 'star' | 'tinder'): void {
+    this.ratingMode = mode;
+    // Reinicia la valoración según el modo
+    if (mode === 'star') {
+      this.currentTinder = null;
+    } else if (mode === 'tinder') {
+      this.currentEstrillitas = 0;
+    }
   }
-
-  getButtonState(button: string): 'normal' | 'pressed' {
-    return this.buttonStates[button];
-  }
-
 }
