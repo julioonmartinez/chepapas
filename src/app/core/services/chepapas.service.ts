@@ -23,14 +23,6 @@ export class ChepapasService {
     this.getAllPapas();
    }
 
-  // loadPapas(): Observable<Chepapas[]>{
-  //   return this.http.get<Chepapas[]>(this.apiUrl).pipe(
-  //     tap((papas)=> this._chePapas.next(papas)),
-  //     catchError(this.handleError)
-  //   )
-
-  // }
-
 
 /** Obtener todos los puestos de papas */
 getAllPapas(): Observable<Chepapas[]> {
@@ -48,32 +40,40 @@ getPapasById(id: string): Observable<Chepapas> {
 
 /** Crear un nuevo puesto de papas */
 createPapas(papas: Chepapas): Observable<Chepapas> {
-  return this.http.post<Chepapas>(this.apiUrl, papas).pipe(catchError(this.handleError));
+  return this.http.post<Chepapas>(this.apiUrl, papas).pipe(
+    tap((newPapa) => {
+      const currentPapas = this._chePapas.value;
+      this._chePapas.next([...currentPapas, newPapa]); // Agregar el nuevo elemento al estado
+    }),
+    catchError(this.handleError)
+  );
 }
 
 /** Actualizar un puesto de papas */
 updatePapas(id: string, papas: Partial<Chepapas>): Observable<Chepapas> {
-  return this.http.put<Chepapas>(`${this.apiUrl}/${id}`, papas).pipe(catchError(this.handleError));
+  return this.http.put<Chepapas>(`${this.apiUrl}/${id}`, papas).pipe(
+    tap((updatedPapa) => {
+      const currentPapas = this._chePapas.value;
+      const updatedPapas = currentPapas.map((p) => (p._id === id ? { ...p, ...updatedPapa } : p));
+      this._chePapas.next(updatedPapas); // Actualizar el estado con el elemento modificado
+    }),
+    catchError(this.handleError)
+  );
 }
 
 /** Eliminar un puesto de papas */
 deletePapas(id: string): Observable<{ message: string }> {
-  return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`).pipe(catchError(this.handleError));
+  return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`).pipe(
+    tap(() => {
+      const currentPapas = this._chePapas.value;
+      const updatedPapas = currentPapas.filter((p) => p._id !== id);
+      this._chePapas.next(updatedPapas); // Eliminar el elemento del estado
+    }),
+    catchError(this.handleError)
+  );
 }
 
-/** Enviar un voto tipo Tinder */
-votePapas(id: string, voteType: 'likes' | 'dislike' | 'superPapa'): Observable<any> {
-  return this.http
-    .post<any>(`${this.apiUrl}/${id}/vote`, { voteType })
-    .pipe(catchError(this.handleError));
-}
 
-/** Enviar una calificación rápida */
-fastReview(id: string, rating: number): Observable<any> {
-  return this.http
-    .post<any>(`${this.apiUrl}/${id}/fast-review`, { rating })
-    .pipe(catchError(this.handleError));
-}
 
 /** Manejo de errores */
 private handleError(error: HttpErrorResponse) {

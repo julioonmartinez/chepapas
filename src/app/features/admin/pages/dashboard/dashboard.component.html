@@ -1,0 +1,26 @@
+<div class="conten-page">
+    <div class="content-hero">
+        <h2>Dashboard</h2>
+        <button (click)="openDialog()" mat-flat-button >Add</button>
+    </div>
+    <div class="list-chepapas">
+        @for (papas of chepapas(); track $index) {
+            <mat-card class="card" >
+                <mat-card-header>
+                    <mat-card-title>{{papas.displayName}} 
+                    @if (papas.active) {
+                        🟢
+                    }@else {
+                        🔴
+                    }    
+                    </mat-card-title>
+                    <mat-card-subtitle>{{papas.hours}} </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-actions align="end" >
+                    <button (click)="openDialog(papas)" mat-flat-button >Editar</button>
+                </mat-card-actions>
+            </mat-card>
+        }
+    </div>
+    
+</div>

@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
-import { HomeComponent } from './pages/home/home.component';
-import { RatingComponent } from './pages/rating/rating.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+
 
 export const routes: Routes = [
     {
         path:'',
         component:LayoutComponent,
         children:[
-            {path:'home', component:HomeComponent },
-            {path:'', redirectTo:'/home', pathMatch:'full'},
+            {path:'dashboard', component:DashboardComponent },
+            {path:'', redirectTo:'/admin/dashboard', pathMatch:'full'},
         ]
 
     }

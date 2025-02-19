@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>{{ data ? 'Edita el puesto' : 'Agregar Puesto de Papas' }}</h2>
+    <mat-dialog-content [formGroup]="chepapasForm">
+      <mat-slide-toggle formControlName="active" >Activo</mat-slide-toggle>
+      <mat-form-field appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="displayName" required>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Dirección</mat-label>
+        <input matInput formControlName="formattedAddress" required>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Horario</mat-label>
+        <input matInput formControlName="hours" required>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput formControlName="description" required></textarea>
+      </mat-form-field>
+      
+      <div formGroupName="location">
+        <mat-form-field appearance="fill">
+          <mat-label>Latitud</mat-label>
+          <input matInput type="number" formControlName="latitude" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Longitud</mat-label>
+          <input matInput type="number" formControlName="longitude" required>
+        </mat-form-field>
+      </div>
+      
+      <h3>Salsas</h3>
+      <div class="sub-form" formArrayName="salsas">
+        <div *ngFor="let salsa of salsas.controls; let i = index" [formGroup]="salsa">
+          <mat-form-field appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Picor</mat-label>
+            <input matInput type="number" formControlName="picor" required>
+          </mat-form-field>
+          <button mat-icon-button (click)="removeSalsa(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <button mat-button (click)="addSalsa()">Agregar Salsa</button>
+      </div>
+      
+      <h3>Categorías</h3>
+      <div class="sub-form" formArrayName="categorias">
+        @for (categoria of categorias.controls; track $index) {
+            <div  class="inputs"  [formGroup]="categoria">
+                <mat-form-field appearance="fill">
+                  <mat-label>Ícono</mat-label>
+                  <input matInput formControlName="icon" required>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Nombre</mat-label>
+                  <input matInput formControlName="name" required>
+                </mat-form-field>
+                <button mat-icon-button (click)="removeCategoria($index)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+        }
+        <button mat-button (click)="addCategoria()">Agregar Categoría</button>
+      </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="end" >
+      @if (data) {
+        <button style="color: red;"  mat-icon-button (click)="deletePapas()" >
+          <mat-icon>delete</mat-icon>
+        </button>
+      }
+      <button mat-button (click)="close()">Cancelar</button>
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="chepapasForm.invalid">Guardar</button>
+    </mat-dialog-actions>
